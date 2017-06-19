@@ -3,7 +3,7 @@
 ```bash
 man command
 ```
-> list all files (including hidden files) with long format (permissions, file sizes, use, group, modification time etc)
+> list all files (including hidden files) with long format (permissions, file sizes, user, group, modification time etc)
 ```bash
 ls -al
 ```
@@ -11,9 +11,13 @@ ls -al
 ```bash
 pwd
 ```
-> copy files and directories
+> copy file
 ```bash
 cp /src/file dest
+```
+> copy directory
+```bash
+cp -r /src/dir dest
 ```
 > move file
 ```bash
@@ -158,35 +162,138 @@ ssh -L localPort:localhost:remotePort user@host
 ```git
 git clone -b branch-name repo-url
 ```
-> change to a specific branch
+> create and checkout to a new branch
 ```git
-git checkout task/OE-xxxx-yyyyyyyyyyy
+git checkout -b [branch-name]
+```
+> checkout to a specific branch
+```git
+git checkout [branch-name]
+```
+> checkout to a specific commit
+```git
+git checkout [commit-checksum]
 ```
 > push local change to remote branch
 ```git
-git push origin task/OE-xxxx-yyyyyyyyyyyyy
+git push [remote-name] [branch-name]
 ```
 >pull changes from remote branch
 ```git
-git pull origin task/OE-xxx-yyyyyyyyyyyyyy
+git pull [remote-name] [branch-name]
 ```
 > cancel local commits not pushed to repo
 ```git
-git reset --hard ##########
+git reset --hard [commit-checksum]
 ```
 > cancel commits pushed to repo
 ```git
-git revert ###########
+git revert [commit-checksum]
 ```
 > see changes made to a file
 ```git
-git diff file
+git diff <file>
 ```
 > delete a local branch
 ```git
-git branch -D branchName
+git branch -D [branch-name]
 ```
-
+> fetch latest branches
+```git
+git fetch
+```
+> remove a file from Git (you have to remove it from your tracked files, more accurately, remove it from your staging area and then commit)
+```git
+git rm <file>
+```
+> remove a file from staging area but keep it in working tree
+```git
+git rm --cashed <file>
+```
+> print all commits in a single line
+```git
+git log --pretty=oneline
+```
+> override previous commit if its not pushed ( you commit too early and possibly forget to add some files, or you mess up your commit message. do the forgotten work and run the following command)
+```git
+git commit --amend
+```
+> unstaging a staged File
+```git
+git reset HEAD <file>
+```
+> unmodifying a modified File
+```git
+git checkout -- <file>
+```
+> list remotes with urls
+```git
+git remote -v
+```
+> adding remote repositories
+```git
+git remote add <shortname> <url>
+```
+> renaming remote repositories
+```git
+git remote rename <old-name> <new-name>
+```
+> show more information about remote repos (branching information)
+```git
+git remote show [remote-name]
+```
+> Git has the ability to tag specific points in history as being important. Typically people use this functionality to mark release points
+> Git uses two main types of tags: lightweight and annotated.
+>A lightweight tag is very much like a branch that doesn’t change – it’s just a pointer to a specific commit.
+>Annotated tags, however, are stored as full objects in the Git database. They’re checksummed; contain the tagger name, email, and date; have a tagging message; and can be signed and verified with GNU Privacy Guard (GPG). It’s generally recommended that you create annotated tags so you can have all this information; but if you want a temporary tag or for some reason don’t want to keep the other information, lightweight tags are available too.
+> list all tags
+```git
+git tag
+```
+> search for tags with a particular pattern
+```git
+git tag -l "v1.8.5*"
+```
+> creating an annotated tag
+```git
+git tag -a [tag] -m [tag-message]
+```
+> see the tag data along with the commit
+```git
+git show [tag]
+```
+> tag commits after you’ve moved past them
+```git
+git tag -a [tag] [commit-checksum]
+```
+> By default, the git push command doesn’t transfer tags to remote servers. You will have to explicitly push tags to a shared server after you have created them. This process is just like sharing remote branches
+```git
+git push [remote-name] [tagname]
+```
+> You can’t really check out a tag in Git, since they can’t be moved around. If you want to put a version of your repository in your working directory that looks like a specific tag, you can create a new branch at a specific tag with
+```git
+git checkout -b [branchname] [tagname]
+```
+>  push dirty working tree state onto your stack
+```git
+git stash
+```
+>  see which stashes you’ve stored
+```git
+git stash list
+```
+>  re apply stashes you’ve stored
+```git
+git stash apply stash@{[stash-number]}
+```
+>  push to another branch
+```git
+git push [remote-name] [branch-1]:[branch-2]
+```
+>  change configuration to avoid typing password every time you push
+```git
+git config remote.origin.url https://{USERNAME}:{PASSWORD}@github.com/{USERNAME}/{REPONAME}.git
+```
 ## :dolphin: mysql
 
 > login
@@ -263,6 +370,10 @@ nvm install version
 > switch to a specific node version
 ```nvm
 nvm use version
+```
+> ENOSPC error
+```bash
+echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 ```
 
 ## :snake: python
