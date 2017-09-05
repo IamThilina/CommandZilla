@@ -99,6 +99,10 @@ passwd
 ```bash
 who
 ```
+> remove a user
+```bash
+userdel username
+```
 #### Process Management
 > snapshot of the current processes
 ```bash
@@ -293,6 +297,16 @@ git push [remote-name] [branch-1]:[branch-2]
 >  change configuration to avoid typing password every time you push
 ```git
 git config remote.origin.url https://{USERNAME}:{PASSWORD}@github.com/{USERNAME}/{REPONAME}.git
+```
+>  Edit pushed commit messages
+```git
+git rebase -i HEAD~n
+```
+Replace pick with reword before each commit message you want to change.
+Save and close the commit list file.
+In each resulting commit file, type the new commit message, save the file, and close it.
+```git
+git push --force
 ```
 ## :dolphin: mysql
 
