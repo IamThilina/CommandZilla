@@ -62,6 +62,13 @@ sort file
 ```bash
 cat /etc/passwd
 ```
+
+### File Management
+
+```bash
+dd if=/dev/zero of=file_name bs=size_in_bytes count=1
+```
+
 #### Linux File Permissions
 
 * 3 types of file permissions - **read, write, execute**
@@ -391,3 +398,69 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 ```
 
 ## :snake: python
+
+## youtube-dl
+
+> Download mp3 from playlist
+```bash
+youtube-dl -t --extract-audio --audio-format mp3 URL
+```
+
+## :whale: docker
+
+> To start running a container, type ```docker container run ``` followed by the name of the image used to make the container, then a colon : followed by the version number of the image used to make the container.
+```docker
+docker container run httpd:2.4
+```
+> Mapping host port to container port. The -p means ```publish ports```. The first number is the port on the host we want to open up, and the second number is the port in the container we want to map it to.
+```docker
+docker container run -p 9999:80 httpd:2.4
+```
+> Finding the ID of the container
+```docker
+docker container ls
+```
+> Each container gets a unique ID, and Docker also assigns them a random name. You can use either the container ID or the container name whenever you're running a command that needs you to specify a container
+```docker
+docker container exec CONTAINER_NAME/ID command
+```
+> Running commands is cool, but we can also attach a shell to those containers and browse them just like they were a full operating system — which they kind of are. The ```-i``` and ```-t``` flags can be passed to the ```exec``` command to keep an interactive shell open, and you can specify the shell you want to attach after the container ID. Here we'll attach a standard Bash shell. Then we can execute any linux command
+```docker
+docker container exec -it CONTAINER_NAME /bin/bash
+```
+> We can create containers from pre-built base images. If we want to customize a base image before creating a container, we should use a Dockerfile. The filename is important — it's always ```Dockerfile``` with a capital ```D```. The first line of a Dockerfile is usually the ```FROM``` keyword followed a base image name. Every other instruction in the Dockerfile following the ```FROM``` instruction will create a new image that blends together everything in the base plus the modifications we're making in the rest of the Dockerfile.
+```docker
+FROM httpd:2.4
+```
+> We can use the Dockerfile to expose a port inside of its associated container. Note that we'll still need to map ports between the host and container when we run ```docker container run```, but this line will let the image know which ports inside of the container should become available
+```docker
+EXPOSE 80
+```
+> With a Dockerfile we can run any commands as the image is being built with the ```RUN``` command
+```docker
+RUN apt-get install -y package
+```
+> Since we can distribute Dockerfiles to other developers, it's a good idea to put our contact information in them with the ```LABEL``` instruction. ```LABEL``` accepts key-value pairs in the form of ```key="value"```
+```docker
+LABEL maintainer="333thilina@gmail.com"
+```
+> We can use the Dockerfile to build a new image with the ```docker image build``` command. The ```--tag``` command is a useful option to pass to ```docker build``` that lets us specify the name of our new image followed by a version number. End the command with path to Dockerfile
+```docker
+docker image build --tag web-server:1.0 PATH_TO_DOCKERFILE
+```
+> Type docker image ls to get a list of all images on your computer
+```docker
+docker image ls
+```
+> Copying files into a running docker container
+```docker
+docker container cp PATH_TO_SRC CONTAINER_NAME:PATH_TO_DEST
+```
+>Copying files through docker instructions in Dokcerfile
+```docker
+COPY PATH_TO_SRC PATH_TO_DEST
+```
+>The first two approaches involved copying a file into a container. But as soon as the container is modified and stopped, all of those changes disappear. This is a problem if we’re using a container for local development, and one way to fix this problem is to use a data volume to create a connection between files on our local computer (host) and the filesystem in the container.
+```docker
+docker run -d -p HOST_PORT:CONTAINER_PORT -v PATH_TO_LOCAL_FOLDER:PATH_TO_CONTAINER_FOLDER DOCKER_IMAGE:IMAGE_VERSION
+```
